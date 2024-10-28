@@ -1,15 +1,22 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
-import { User } from './user.entity';  // Assuming you have a User entity already
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import { UserEntity } from './user.entity';
+import { MessageEntity } from './message.entity';
 
 @Entity()
-export class Group {
+export class GroupEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
     name: string;
 
-    @ManyToMany(() => User)
+    @ManyToOne(() => UserEntity, user => user.ownedGroups)
+    owner: UserEntity;
+
+    @ManyToMany(() => UserEntity, user => user.joinedGroups)
     @JoinTable()
-    users: User[];
+    participants: UserEntity[];
+
+    @OneToMany(() => MessageEntity, message => message.group)
+    messages: MessageEntity[];
 }

@@ -1,28 +1,30 @@
-import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    CreateDateColumn,
-    UpdateDateColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { MessageEntity } from './message.entity';
+import { GroupEntity } from './group.entity';
 
 @Entity()
-export class User {
+export class UserEntity {
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Column({ unique: true })
+    username: string;
 
     @Column({ unique: true })
     email: string;
 
     @Column()
-    name: string;
+    password: string; // Ensure this is hashed
 
-    @Column()
-    password: string;
+    @OneToMany(() => MessageEntity, message => message.sender)
+    sentMessages: MessageEntity[];
 
-    @CreateDateColumn()
-    created_at: Date;
+    @OneToMany(() => MessageEntity, message => message.receiver)
+    receivedMessages: MessageEntity[];
 
-    @UpdateDateColumn()
-    updated_at: Date;
+    @OneToMany(() => GroupEntity, group => group.owner)
+    ownedGroups: GroupEntity[];
+
+    @OneToMany(() => GroupEntity, group => group.participants)
+    joinedGroups: GroupEntity[];
 }
