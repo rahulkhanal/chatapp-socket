@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const RegisterPage = () => {
   const [name, setName] = useState('');
@@ -11,24 +12,22 @@ const RegisterPage = () => {
     setError(''); // Reset any previous errors
 
     try {
-      const response = await fetch('http://localhost:3000/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, email, password }),
+      const response = await axios.post('http://localhost:3000/auth/register', {
+        username: name,
+        email,
+        password,
       });
 
       const data = await response.json();
 
       if (response.ok) {
         console.log('Registration successful:', data);
-        // Redirect or perform actions after registration
       } else {
         setError(data.message || 'Registration failed');
       }
     } catch (err) {
-      setError('Something went wrong');
+      console.log(err);
+      setError(err.message || 'Something went wrong');
     }
   };
 
@@ -38,7 +37,7 @@ const RegisterPage = () => {
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <form className="register-form" onSubmit={handleSubmit}>
         <div>
-          <label>Name:</label>
+          <label>User Name:</label>
           <input
             type="text"
             value={name}

@@ -22,7 +22,7 @@ const LoginPage = () => {
 
       if (response.ok) {
         console.log('Login successful:', data);
-        // Redirect or perform actions after login
+        window.location.href = '/messege-user';
       } else {
         setError(data.message || 'Login failed');
       }
