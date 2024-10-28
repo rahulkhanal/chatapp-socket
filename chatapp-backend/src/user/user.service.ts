@@ -34,4 +34,12 @@ export class UserService {
       throw new Error('Invalid credentials');
     }
   }
+
+  findAll() {
+    try {
+      return this.userRepository.find();
+    } catch (error) {
+
+    }
+  }
 }
