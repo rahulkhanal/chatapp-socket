@@ -17,7 +17,7 @@ export class UserController {
     return this.userService.login(loginUserDto);
   }
 
-  @Get()
+  @Get('user')
   findAll() {
     return this.userService.findAll();
   }
